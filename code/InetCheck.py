@@ -38,25 +38,33 @@ else:
     print("Not connected from ", end='')
 print(time_pretty(time_status_change), end='', flush=True)
 
-while True:
-    # Update connection status
-    connection_status_old = connection_status
-    connection_status = check_connection()
 
-    # Did connection status change?
-    if connection_status and not connection_status_old:
-        print(" to ", end='')
-        print(time_pretty(time.time()), end='')
-        print(" - " + passed_time(time.time() - time_status_change))
-        print("Connected     from ", end='')
-        print(time_pretty(time_status_change), end='', flush=True)
-        time_status_change = time.time()
-    elif not connection_status and connection_status_old:
-        print(" to ", end='')
-        print(time_pretty(time.time()), end='')
-        print(" - " + passed_time(time.time() - time_status_change))
-        print("Not connected from ", end='')
-        print(time_pretty(time_status_change), end='', flush=True)
-        time_status_change = time.time()
+def main():
+    global connection_status
+    global connection_status_old
+    global time_status_change
+    while True:
+        # Update connection status
+        connection_status_old = connection_status
+        connection_status = check_connection()
 
-    time.sleep(1)
+        # Did connection status change?
+        if connection_status and not connection_status_old:
+            print(" to ", end='')
+            print(time_pretty(time.time()), end='')
+            print(" - " + passed_time(time.time() - time_status_change))
+            print("Connected     from ", end='')
+            print(time_pretty(time_status_change), end='', flush=True)
+            time_status_change = time.time()
+        elif not connection_status and connection_status_old:
+            print(" to ", end='')
+            print(time_pretty(time.time()), end='')
+            print(" - " + passed_time(time.time() - time_status_change))
+            print("Not connected from ", end='')
+            print(time_pretty(time_status_change), end='', flush=True)
+            time_status_change = time.time()
+
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
