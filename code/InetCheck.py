@@ -10,29 +10,35 @@ def checkInternetSocket(host="google.de", port=80, timeout=3):
         return False
 
 
-connection_status = "NOT SET"
-connection_status_old = "NOT SET"
+# Declare and initialize variables
+connection_status = checkInternetSocket()
+connection_status_old = connection_status
 time_status_change = time.time()
 
-print("", end='')
+# Show first connection status
+if checkInternetSocket():
+    print("Connected     from ", end='')
+else:
+    print("Not connected from ", end='')
+print(time_status_change, end='', flush=True)
 
 while True:
+    # Update connection status
     connection_status_old = connection_status
     connection_status = checkInternetSocket()
 
-    if connection_status:
-        if not connection_status_old:
-            print(" to ", end='')
-            print(time.time())
-            print("Connected     from ", end='')
-            print(time_status_change, end='', flush=True)
-            time_status_change = time.time()
-    else:
-        if connection_status_old:
-            print(" to ", end='')
-            print(time.time())
-            print("Not connected from ", end='')
-            print(time_status_change, end='', flush=True)
-            time_status_change = time.time()
+    # Did connection status change?
+    if connection_status and not connection_status_old:
+        print(" to ", end='')
+        print(time.time())
+        print("Connected     from ", end='')
+        print(time_status_change, end='', flush=True)
+        time_status_change = time.time()
+    elif not connection_status and connection_status_old:
+        print(" to ", end='')
+        print(time.time())
+        print("Not connected from ", end='')
+        print(time_status_change, end='', flush=True)
+        time_status_change = time.time()
 
     time.sleep(1)
