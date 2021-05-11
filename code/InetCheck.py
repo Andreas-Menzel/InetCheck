@@ -2,7 +2,7 @@ import socket
 import time
 
 # Check the internet connection
-def check_connection(host="google.de", port=80, timeout=3):
+def check_connection(host="example.com", port=80, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
