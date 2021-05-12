@@ -1,5 +1,6 @@
 import argparse
 import socket
+import subprocess
 import time
 
 
@@ -21,10 +22,10 @@ conn_port = 80
 conn_timeout = 3
 
 check_interval = 5
-log_file = ""
+log_file = None
 
-cmd_connected = ""
-cmd_disconnected = ""
+cmd_connected = None
+cmd_disconnected = None
 
 
 # Update variables according to program parameters
@@ -113,6 +114,9 @@ def main():
             print("Connected     from ", end='')
             print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
+
+            if cmd_connected != None:
+                subprocess.run(cmd_connected)
         elif not connection_status and connection_status_old:
             print(" to ", end='')
             print(time_pretty(time.time()), end='')
@@ -120,6 +124,9 @@ def main():
             print("Not connected from ", end='')
             print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
+
+            if cmd_disconnected != None:
+                subprocess.run(cmd_disconnected)
 
         time.sleep(check_interval)
 
