@@ -1,6 +1,8 @@
 import argparse
+from signal import signal, SIGINT
 import socket
 import subprocess
+from sys import exit
 import time
 
 
@@ -130,5 +132,12 @@ def main():
 
         time.sleep(check_interval)
 
+
+def end(signal_received, frame):
+    print('SIGINT or CTRL-C detected. Exiting gracefully')
+    exit(0)
+
+
 if __name__ == "__main__":
+    signal(SIGINT, end)
     main()
