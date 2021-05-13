@@ -172,11 +172,14 @@ def end(signal_received, frame):
 
     total_time = time_connected + time_disconnected
 
-    print("Time connected   : " + passed_time(time_connected) + " - ", end='')
-    print(str(round((time_connected / total_time) * 100, 2)) + "%")
+    if total_time > 0:
+        print("Time connected   : " + passed_time(time_connected) + " - ", end='')
+        print(str(round((time_connected / total_time) * 100, 2)) + "%")
 
-    print("Time disconnected: " + passed_time(time_disconnected) + " - ", end='')
-    print(str(round((time_disconnected / total_time) * 100, 2)) + "%")
+        print("Time disconnected: " + passed_time(time_disconnected) + " - ", end='')
+        print(str(round((time_disconnected / total_time) * 100, 2)) + "%")
+    else:
+        print("No statistics to print.")
 
     print("Goodbye!")
     exit(0)
