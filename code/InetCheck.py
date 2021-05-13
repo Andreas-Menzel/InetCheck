@@ -8,15 +8,38 @@ import time
 
 # Setup parser
 parser = argparse.ArgumentParser(description='Check and monitor the internet connection')
-parser.add_argument('-H', '--host', help='unknown')
-parser.add_argument('-p', '--port', type=int, help='unknown')
-parser.add_argument('-t', '--timeout', type=int, help='unknown')
-parser.add_argument('-i', '--interval', type=int, help='unknown')
-parser.add_argument('-lf', '--log_file', help='unknown')
-parser.add_argument('-cc', '--cmd_connected', help='unknown')
-parser.add_argument('-cd', '--cmd_disconnected', help='unknown')
-parser.add_argument('-bc', '--beeps_connected', type=int, help='unknown')
-parser.add_argument('-bd', '--beeps_disconnected', type=int, help='unknown')
+parser.add_argument('-H', '--host',
+    metavar='',
+    help='specify host')
+parser.add_argument('-p', '--port',
+    metavar='',
+    type=int,
+    help='specify port')
+parser.add_argument('-t', '--timeout',
+    metavar='',
+    type=int,
+    help='specify connection timeout')
+parser.add_argument('-i', '--interval',
+    metavar='',
+    type=int,
+    help='delay between connection checks')
+parser.add_argument('-lf', '--log_file',
+    metavar='',
+    help='specify log file')
+parser.add_argument('-cc', '--cmd_connected',
+    metavar='',
+    help='shell command which will be executed when the system can establish a connection to the host again')
+parser.add_argument('-cd', '--cmd_disconnected',
+    metavar='',
+    help='shell command which will be executed when the system can not establish a connection to the host anymore')
+parser.add_argument('-bc', '--beeps_connected',
+    metavar='',
+    type=int,
+    help='number of beeps the system should make when it can establish a connection to the host again')
+parser.add_argument('-bd', '--beeps_disconnected',
+    metavar='',
+    type=int,
+    help='number of beeps the system should make when it can not establish a connection to the host anymore')
 args = parser.parse_args()
 
 
