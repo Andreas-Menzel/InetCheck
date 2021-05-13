@@ -40,37 +40,38 @@ time_disconnected = 0
 
 
 # Update variables according to program parameters
-if args.host != None:
-    conn_host = args.host
-    print("Using host " + conn_host)
-if args.port != None:
-    conn_port = args.port
-    print("Using port " + str(conn_port))
-if args.timeout != None:
-    conn_timeout = args.timeout
-    print("Using timeout " + str(conn_timeout) + "s")
+def apply_program_arguments():
+    if args.host != None:
+        conn_host = args.host
+        print("Using host " + conn_host)
+    if args.port != None:
+        conn_port = args.port
+        print("Using port " + str(conn_port))
+    if args.timeout != None:
+        conn_timeout = args.timeout
+        print("Using timeout " + str(conn_timeout) + "s")
 
-if args.interval != None:
-    check_interval = args.interval
-    print("Using interval " + str(check_interval) + "s")
+    if args.interval != None:
+        check_interval = args.interval
+        print("Using interval " + str(check_interval) + "s")
 
-if args.log_file != None:
-    log_file = args.log_file
-    print("Using log-file " + log_file)
+    if args.log_file != None:
+        log_file = args.log_file
+        print("Using log-file " + log_file)
 
-if args.cmd_connected != None:
-    cmd_connected = args.cmd_connected
-    print("Command when connected: " + cmd_connected)
-if args.cmd_disconnected != None:
-    cmd_disconnected = args.cmd_disconnected
-    print("Command when disconnected: " + cmd_disconnected)
+    if args.cmd_connected != None:
+        cmd_connected = args.cmd_connected
+        print("Command when connected: " + cmd_connected)
+    if args.cmd_disconnected != None:
+        cmd_disconnected = args.cmd_disconnected
+        print("Command when disconnected: " + cmd_disconnected)
 
-if args.beeps_connected != None and args.beeps_connected >= 0:
-    beeps_connected = args.beeps_connected
-    print("Beeping " + str(beeps_connected) + " times when connected: ")
-if args.beeps_disconnected != None and args.beeps_disconnected >= 0:
-    beeps_disconnected = args.beeps_disconnected
-    print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
+    if args.beeps_connected != None and args.beeps_connected >= 0:
+        beeps_connected = args.beeps_connected
+        print("Beeping " + str(beeps_connected) + " times when connected: ")
+    if args.beeps_disconnected != None and args.beeps_disconnected >= 0:
+        beeps_disconnected = args.beeps_disconnected
+        print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
 
 
 # Check the internet connection
@@ -107,20 +108,22 @@ connection_status_old = connection_status
 time_status_change = time.time()
 
 
-# Show first connection status
-if check_connection():
-    print("Connected     from ", end='')
-else:
-    print("Not connected from ", end='')
-print(time_pretty(time_status_change), end='', flush=True)
-
-
 def main():
     global connection_status
     global connection_status_old
     global time_status_change
     global time_connected
     global time_disconnected
+
+    apply_program_arguments()
+
+    # Show first connection status
+    if check_connection():
+        print("Connected     from ", end='')
+    else:
+        print("Not connected from ", end='')
+    print(time_pretty(time_status_change), end='', flush=True)
+
     while True:
         # Update connection status
         connection_status_old = connection_status
