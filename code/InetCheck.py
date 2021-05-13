@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import argparse
 from signal import signal, SIGINT
 import socket
@@ -10,7 +9,8 @@ import time
 
 
 # Setup parser
-parser = argparse.ArgumentParser(description='Check and monitor the internet connection')
+parser = argparse.ArgumentParser(description='Check and monitor the internet connection', prog='InetCheck')
+parser.add_argument('--version', action='version', version='%(prog)s v1.1.1')
 parser.add_argument('-H', '--host',
     metavar='',
     help='specify host')
@@ -43,6 +43,9 @@ parser.add_argument('-bd', '--beeps_disconnected',
     metavar='',
     type=int,
     help='number of beeps the system should make when it can not establish a connection to the host anymore')
+parser.add_argument('-q', '--quiet',
+    action='store_true',
+    help='use this to not display any output in the terminal')
 args = parser.parse_args()
 
 
@@ -66,7 +69,8 @@ time_disconnected = 0
 
 
 def my_print(s='', end='\n', flush=True):
-    print(s, end=end, flush=flush)
+    if not args.quiet:
+        print(s, end=end, flush=flush)
     if log_file != "":
         file = open(log_file, 'a+')
         file.write(s + end)
