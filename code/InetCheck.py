@@ -41,14 +41,14 @@ if args.host != None:
     print("Using host " + conn_host)
 if args.port != None:
     conn_port = args.port
-    print("Using port " + conn_port)
+    print("Using port " + str(conn_port))
 if args.timeout != None:
     conn_timeout = args.timeout
-    print("Using timeout " + conn_timeout + "s")
+    print("Using timeout " + str(conn_timeout) + "s")
 
 if args.interval != None:
     check_interval = args.interval
-    print("Using interval " + check_interval + "s")
+    print("Using interval " + str(check_interval) + "s")
 
 if args.log_file != None:
     log_file = args.log_file
