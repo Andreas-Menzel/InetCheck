@@ -34,6 +34,10 @@ cmd_disconnected = None
 beeps_connected = 0
 beeps_disconnected = 0
 
+# program variables
+time_connected = 0
+time_disconnected = 0
+
 
 # Update variables according to program parameters
 if args.host != None:
@@ -115,6 +119,8 @@ def main():
     global connection_status
     global connection_status_old
     global time_status_change
+    global time_connected
+    global time_disconnected
     while True:
         # Update connection status
         connection_status_old = connection_status
@@ -125,6 +131,8 @@ def main():
             print(" to ", end='')
             print(time_pretty(time.time()), end='')
             print(" - " + passed_time(time.time() - time_status_change))
+            time_disconnected += time.time() - time_status_change
+
             print("Connected     from ", end='')
             print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
@@ -138,6 +146,8 @@ def main():
             print(" to ", end='')
             print(time_pretty(time.time()), end='')
             print(" - " + passed_time(time.time() - time_status_change))
+            time_connected += time.time() - time_status_change
+
             print("Not connected from ", end='')
             print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
@@ -152,7 +162,20 @@ def main():
 
 
 def end(signal_received, frame):
-    print('SIGINT or CTRL-C detected. Exiting gracefully')
+    print(" to ", end='')
+    print(time_pretty(time.time()), end='')
+    print(" - " + passed_time(time.time() - time_status_change))
+    print()
+
+    total_time = time_connected + time_disconnected
+
+    print("Time connected   : " + passed_time(time_connected) + " - ", end='')
+    print(str(round((time_connected / total_time) * 100, 2)) + "%")
+
+    print("Time disconnected: " + passed_time(time_disconnected) + " - ", end='')
+    print(str(round((time_disconnected / total_time) * 100, 2)) + "%")
+
+    print("Goodbye!")
     exit(0)
 
 
