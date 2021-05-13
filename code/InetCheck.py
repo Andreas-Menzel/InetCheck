@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import argparse
 from signal import signal, SIGINT
 import socket
@@ -211,9 +214,15 @@ def main():
 
 
 def end(signal_received, frame):
+    global connection_status
     global time_connected
     global time_disconnected
     global time_status_change
+
+    if connection_status:
+        time_connected += time.time() - time_status_change
+    else:
+        time_disconnected += time.time() - time_status_change
 
     my_print(" to ", end='')
     my_print(time_pretty(time.time()), end='')
