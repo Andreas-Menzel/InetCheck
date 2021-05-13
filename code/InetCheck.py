@@ -64,6 +64,16 @@ time_disconnected = 0
 
 # Update variables according to program parameters
 def apply_program_arguments():
+    global conn_host
+    global conn_port
+    global conn_timeout
+    global check_interval
+    global log_file
+    global cmd_connected
+    global cmd_disconnected
+    global beeps_connected
+    global beeps_disconnected
+
     if args.host != None:
         conn_host = args.host
         print("Using host " + conn_host)
@@ -98,7 +108,7 @@ def apply_program_arguments():
 
 
 # Check the internet connection
-def check_connection(host=conn_host, port=conn_port, timeout=conn_timeout):
+def check_connection(host='example.com', port=80, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
@@ -137,6 +147,13 @@ def main():
     global time_status_change
     global time_connected
     global time_disconnected
+
+    global check_interval
+    global log_file
+    global cmd_connected
+    global cmd_disconnected
+    global beeps_connected
+    global beeps_disconnected
 
     apply_program_arguments()
 
@@ -188,6 +205,10 @@ def main():
 
 
 def end(signal_received, frame):
+    global time_connected
+    global time_disconnected
+    global time_status_change
+
     print(" to ", end='')
     print(time_pretty(time.time()), end='')
     print(" - " + passed_time(time.time() - time_status_change))
@@ -195,7 +216,7 @@ def end(signal_received, frame):
 
     total_time = time_connected + time_disconnected
 
-    if total_time > 0:
+    if total_time > 0.0:
         print("Time connected   : " + passed_time(time_connected) + " - ", end='')
         print(str(round((time_connected / total_time) * 100, 2)) + "%")
 
