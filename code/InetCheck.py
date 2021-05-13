@@ -49,7 +49,7 @@ conn_port = 80
 conn_timeout = 3
 
 check_interval = 5
-log_file = None
+log_file = ""
 
 cmd_connected = None
 cmd_disconnected = None
@@ -61,6 +61,13 @@ beeps_disconnected = 0
 time_connected = 0
 time_disconnected = 0
 
+
+def my_print(s='', end='\n', flush=True):
+    print(s, end=end, flush=flush)
+    if log_file != "":
+        file = open(log_file, 'a+')
+        file.write(s + end)
+        file.close()
 
 # Update variables according to program parameters
 def apply_program_arguments():
@@ -76,35 +83,35 @@ def apply_program_arguments():
 
     if args.host != None:
         conn_host = args.host
-        print("Using host " + conn_host)
+        my_print("Using host " + conn_host)
     if args.port != None:
         conn_port = args.port
-        print("Using port " + str(conn_port))
+        my_print("Using port " + str(conn_port))
     if args.timeout != None:
         conn_timeout = args.timeout
-        print("Using timeout " + str(conn_timeout) + "s")
+        my_print("Using timeout " + str(conn_timeout) + "s")
 
     if args.interval != None:
         check_interval = args.interval
-        print("Using interval " + str(check_interval) + "s")
+        my_print("Using interval " + str(check_interval) + "s")
 
     if args.log_file != None:
         log_file = args.log_file
-        print("Using log-file " + log_file)
+        my_print("Using log-file " + log_file)
 
     if args.cmd_connected != None:
         cmd_connected = args.cmd_connected
-        print("Command when connected: " + cmd_connected)
+        my_print("Command when connected: " + cmd_connected)
     if args.cmd_disconnected != None:
         cmd_disconnected = args.cmd_disconnected
-        print("Command when disconnected: " + cmd_disconnected)
+        my_print("Command when disconnected: " + cmd_disconnected)
 
     if args.beeps_connected != None and args.beeps_connected >= 0:
         beeps_connected = args.beeps_connected
-        print("Beeping " + str(beeps_connected) + " times when connected: ")
+        my_print("Beeping " + str(beeps_connected) + " times when connected: ")
     if args.beeps_disconnected != None and args.beeps_disconnected >= 0:
         beeps_disconnected = args.beeps_disconnected
-        print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
+        my_print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
 
 
 # Check the internet connection
@@ -135,11 +142,10 @@ def time_pretty(timestamp):
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp))
 
 
-# Declare and initialize variables
+# Declare and initialize program variables
 connection_status = check_connection()
 connection_status_old = connection_status
 time_status_change = time.time()
-
 
 def main():
     global connection_status
@@ -159,10 +165,10 @@ def main():
 
     # Show first connection status
     if check_connection():
-        print("Connected     from ", end='')
+        my_print("Connected     from ", end='')
     else:
-        print("Not connected from ", end='')
-    print(time_pretty(time_status_change), end='', flush=True)
+        my_print("Not connected from ", end='')
+    my_print(time_pretty(time_status_change), end='', flush=True)
 
     while True:
         # Update connection status
@@ -171,13 +177,13 @@ def main():
 
         # Did connection status change?
         if connection_status and not connection_status_old:
-            print(" to ", end='')
-            print(time_pretty(time.time()), end='')
-            print(" - " + passed_time(time.time() - time_status_change))
+            my_print(" to ", end='')
+            my_print(time_pretty(time.time()), end='')
+            my_print(" - " + passed_time(time.time() - time_status_change))
             time_disconnected += time.time() - time_status_change
 
-            print("Connected     from ", end='')
-            print(time_pretty(time_status_change), end='', flush=True)
+            my_print("Connected     from ", end='')
+            my_print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
 
             if cmd_connected != None:
@@ -186,13 +192,13 @@ def main():
                 print('\a', end='', flush=True)
                 time.sleep(0.25)
         elif not connection_status and connection_status_old:
-            print(" to ", end='')
-            print(time_pretty(time.time()), end='')
-            print(" - " + passed_time(time.time() - time_status_change))
+            my_print(" to ", end='')
+            my_print(time_pretty(time.time()), end='')
+            my_print(" - " + passed_time(time.time() - time_status_change))
             time_connected += time.time() - time_status_change
 
-            print("Not connected from ", end='')
-            print(time_pretty(time_status_change), end='', flush=True)
+            my_print("Not connected from ", end='')
+            my_print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
 
             if cmd_disconnected != None:
@@ -209,23 +215,23 @@ def end(signal_received, frame):
     global time_disconnected
     global time_status_change
 
-    print(" to ", end='')
-    print(time_pretty(time.time()), end='')
-    print(" - " + passed_time(time.time() - time_status_change))
-    print()
+    my_print(" to ", end='')
+    my_print(time_pretty(time.time()), end='')
+    my_print(" - " + passed_time(time.time() - time_status_change))
+    my_print()
 
     total_time = time_connected + time_disconnected
 
     if total_time > 0.0:
-        print("Time connected   : " + passed_time(time_connected) + " - ", end='')
-        print(str(round((time_connected / total_time) * 100, 2)) + "%")
+        my_print("Time connected   : " + passed_time(time_connected) + " - ", end='')
+        my_print(str(round((time_connected / total_time) * 100, 2)) + "%")
 
-        print("Time disconnected: " + passed_time(time_disconnected) + " - ", end='')
-        print(str(round((time_disconnected / total_time) * 100, 2)) + "%")
+        my_print("Time disconnected: " + passed_time(time_disconnected) + " - ", end='')
+        my_print(str(round((time_disconnected / total_time) * 100, 2)) + "%")
     else:
-        print("No statistics to print.")
+        my_print("No statistics to print.")
 
-    print("Goodbye!")
+    my_print("Goodbye!")
     exit(0)
 
 
