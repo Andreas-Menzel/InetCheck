@@ -130,7 +130,7 @@ def main():
             time_status_change = time.time()
 
             if cmd_connected != None:
-                subprocess.run(cmd_connected)
+                subprocess.run(cmd_connected, shell=True)
             for i in range(beeps_connected):
                 print('\a', end='', flush=True)
                 time.sleep(0.25)
@@ -143,7 +143,7 @@ def main():
             time_status_change = time.time()
 
             if cmd_disconnected != None:
-                subprocess.run(cmd_disconnected)
+                subprocess.run(cmd_disconnected, shell=True)
             for i in range(beeps_disconnected):
                 print('\a', end='', flush=True)
                 time.sleep(0.25)
