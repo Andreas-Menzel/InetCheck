@@ -15,6 +15,8 @@ parser.add_argument('-i', '--interval', type=int, help='unknown')
 parser.add_argument('-lf', '--log_file', help='unknown')
 parser.add_argument('-cc', '--cmd_connected', help='unknown')
 parser.add_argument('-cd', '--cmd_disconnected', help='unknown')
+parser.add_argument('-bc', '--beeps_connected', type=int, help='unknown')
+parser.add_argument('-bd', '--beeps_disconnected', type=int, help='unknown')
 args = parser.parse_args()
 
 
@@ -28,6 +30,9 @@ log_file = None
 
 cmd_connected = None
 cmd_disconnected = None
+
+beeps_connected = 0
+beeps_disconnected = 0
 
 
 # Update variables according to program parameters
@@ -55,6 +60,13 @@ if args.cmd_connected != None:
 if args.cmd_disconnected != None:
     cmd_disconnected = args.cmd_disconnected
     print("Command when disconnected: " + cmd_disconnected)
+
+if args.beeps_connected != None and args.beeps_connected >= 0:
+    beeps_connected = args.beeps_connected
+    print("Beeping " + str(beeps_connected) + " times when connected: ")
+if args.beeps_disconnected != None and args.beeps_disconnected >= 0:
+    beeps_disconnected = args.beeps_disconnected
+    print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
 
 
 # Check the internet connection
@@ -119,6 +131,9 @@ def main():
 
             if cmd_connected != None:
                 subprocess.run(cmd_connected)
+            for i in range(beeps_connected):
+                print('\a', end='', flush=True)
+                time.sleep(0.25)
         elif not connection_status and connection_status_old:
             print(" to ", end='')
             print(time_pretty(time.time()), end='')
@@ -129,6 +144,9 @@ def main():
 
             if cmd_disconnected != None:
                 subprocess.run(cmd_disconnected)
+            for i in range(beeps_disconnected):
+                print('\a', end='', flush=True)
+                time.sleep(0.25)
 
         time.sleep(check_interval)
 
