@@ -145,10 +145,10 @@ def apply_program_arguments():
 
     if args.beeps_connected != None and args.beeps_connected >= 0:
         beeps_connected = args.beeps_connected
-        my_print("Beeping " + str(beeps_connected) + " times when connected: ")
+        my_print("Beeping " + str(beeps_connected) + " times when connected")
     if args.beeps_disconnected != None and args.beeps_disconnected >= 0:
         beeps_disconnected = args.beeps_disconnected
-        my_print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
+        my_print("Beeping " + str(beeps_disconnected) + " times when disconnected")
 
 
 # check_connection
