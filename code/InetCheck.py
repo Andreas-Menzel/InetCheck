@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+#-------------------------------------------------------------------------------
+# InetCheck
+#
+# InetCheck can be used to check the systems internet connectivity. You can also
+#     check if your server is still running by supplying the respective host and
+#     port.
+#
+# https://github.com/Andreas-Menzel/InetCheck
+#-------------------------------------------------------------------------------
+# @author: Andreas Menzel
+# @license: MIT License
+# @copyright: Copyright (c) 2021 Andreas Menzel
+#-------------------------------------------------------------------------------
+
 import argparse
 from signal import signal, SIGINT
 import socket
@@ -9,8 +23,8 @@ import time
 
 
 # Setup parser
-parser = argparse.ArgumentParser(description='Check and monitor the internet connection', prog='InetCheck')
-parser.add_argument('--version', action='version', version='%(prog)s v1.1.1')
+parser = argparse.ArgumentParser(description='Check and monitor the connectivity of a specified host.', prog='InetCheck')
+parser.add_argument('--version', action='version', version='%(prog)s v1.2.1')
 parser.add_argument('-H', '--host',
     metavar='',
     help='specify host')
@@ -68,6 +82,17 @@ time_connected = 0
 time_disconnected = 0
 
 
+# my_print
+#
+# Prints text to the console if not --quiet and to a log-file if supplied.
+#
+# @param    string  s       String to print and save.
+# @param    string  end     End.
+# @param    bool    flush   Flush.
+#
+# @return   None
+#
+# @note     Use like builtin function print().
 def my_print(s='', end='\n', flush=True):
     if not args.quiet:
         print(s, end=end, flush=flush)
@@ -76,7 +101,12 @@ def my_print(s='', end='\n', flush=True):
         file.write(s + end)
         file.close()
 
-# Update variables according to program parameters
+
+# apply_program_arguments
+#
+# Get values passed to argparse and update program parameters.
+#
+# @return   None
 def apply_program_arguments():
     global conn_host
     global conn_port
@@ -121,7 +151,15 @@ def apply_program_arguments():
         my_print("Beeping " + str(beeps_disconnected) + " times when disconnected: ")
 
 
-# Check the internet connection
+# check_connection
+#
+# Check if we can connect to a host.
+#
+# @param    string      host        Host.
+# @param    int         port        Port.
+# @param    int         timeout     Timeout.
+#
+# @return   Bool        Returns True if host can be reached. False otherwise.
 def check_connection(host='example.com', port=80, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
@@ -131,7 +169,14 @@ def check_connection(host='example.com', port=80, timeout=3):
         return False
 
 
-# Convert seconds into readable string
+
+# passed_time
+#
+# Convert seconds into readable string with format '0d 12h 15m 30s'.
+#
+# @param    int         t_seconds   The seconds to convert.
+#
+# @return   string      String representation of the seconds.
 def passed_time(t_seconds):
     days    = int(t_seconds / (60*60*24))
     hours   = int((t_seconds - (days * (60*60*24))) / (60*60))
@@ -145,6 +190,13 @@ def passed_time(t_seconds):
     return return_string
 
 
+# time_pretty
+#
+# Converts a timestamp into a string with format '2022-06-15 16:17:00'.
+#
+# @param    number  timestamp   The timestamp to convert.
+#
+# @return   string  String representation of the timestamp.
 def time_pretty(timestamp):
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp))
 
@@ -193,6 +245,7 @@ def main():
             my_print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
 
+            # Execute command and beep if requested.
             if cmd_connected != None:
                 subprocess.run(cmd_connected, shell=True)
             for i in range(beeps_connected):
@@ -208,6 +261,7 @@ def main():
             my_print(time_pretty(time_status_change), end='', flush=True)
             time_status_change = time.time()
 
+            # Execute command and beep if requested.
             if cmd_disconnected != None:
                 subprocess.run(cmd_disconnected, shell=True)
             for i in range(beeps_disconnected):
@@ -217,6 +271,14 @@ def main():
         time.sleep(check_interval)
 
 
+# end
+#
+# Prints summary.
+#
+# @param    int         signal_received     Signal.
+# @param    FrameType   frame               Frame.
+#
+# @return   None
 def end(signal_received, frame):
     global connection_status
     global time_connected
