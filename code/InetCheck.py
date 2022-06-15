@@ -23,7 +23,7 @@ import time
 
 
 # Setup parser
-parser = argparse.ArgumentParser(description='Check and monitor the connectivity of a specified host.', prog='InetCheck')
+parser = argparse.ArgumentParser(description='Check and monitor the connectivity to a specified host.', prog='InetCheck')
 parser.add_argument('--version', action='version', version='%(prog)s v1.2.1')
 parser.add_argument('-H', '--host',
     metavar='',

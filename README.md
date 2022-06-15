@@ -7,29 +7,27 @@ check if your server is still running by supplying the respective host and port.
 ## Usage
 
 ```shell
-usage: InetCheck.py [-h] [-H] [-p] [-t] [-i] [-lf] [-cc] [-cd] [-bc] [-bd]
+usage: InetCheck [-h] [--version] [-H] [-p] [-t] [-i] [-lf] [-cc] [-cd] [-bc] [-bd] [-q]
 
-Check and monitor the internet connection
+Check and monitor the connectivity to a specified host.
 
 optional arguments:
   -h, --help            show this help message and exit
+  --version             show program's version number and exit
   -H , --host           specify host
   -p , --port           specify port
   -t , --timeout        specify connection timeout
   -i , --interval       delay between connection checks
   -lf , --log_file      specify log file
   -cc , --cmd_connected
-                        shell command which will be executed when the system
-                        can establish a connection to the host again
+                        shell command which will be executed when the system can establish a connection to the host again
   -cd , --cmd_disconnected
-                        shell command which will be executed when the system
-                        can not establish a connection to the host anymore
+                        shell command which will be executed when the system can not establish a connection to the host anymore
   -bc , --beeps_connected
-                        number of beeps the system should make when it can
-                        establish a connection to the host again
+                        number of beeps the system should make when it can establish a connection to the host again
   -bd , --beeps_disconnected
-                        number of beeps the system should make when it can not
-                        establish a connection to the host anymore
+                        number of beeps the system should make when it can not establish a connection to the host anymore
+  -q, --quiet           use this to not display any output in the terminal
 ```
 
 
