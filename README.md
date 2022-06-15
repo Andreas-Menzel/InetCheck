@@ -1,6 +1,7 @@
 # InetCheck
 
-A simple Python script that checks the system's internet connection.
+InetCheck can be used to check the systems internet connectivity. You can also
+check if your server is still running by supplying the respective host and port.
 
 
 ## Usage
@@ -29,4 +30,28 @@ optional arguments:
   -bd , --beeps_disconnected
                         number of beeps the system should make when it can not
                         establish a connection to the host anymore
+```
+
+
+## Examples
+
+### Simple logging to file
+
+```
+./InetCheck.py --log_file 'Connection.log'
+```
+
+### Logging with status-change notification
+
+Play beep-sound 3x when reconnected and 5x when disconnected.
+
+```
+./InetCheck.py --log_file 'Connection.log' -bc 3 -bd 5
+```
+
+### Check if server is running
+
+Check if host example.com can be reached.
+```
+./InetCheck.py --log_file 'Connection.log' --host 'example.com'
 ```
